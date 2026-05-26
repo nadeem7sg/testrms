@@ -1,0 +1,8 @@
+tenant:
+  id: tenant_demo
+  workload: testrms
+  environment: qa
+  protected: false
+  rollout:
+    strategy: canary
+    steps: [10, 50, 100]

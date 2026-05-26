@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: testrms
+  labels:
+    app.kubernetes.io/name: testrms
+spec:
+  selector:
+    app.kubernetes.io/name: testrms
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

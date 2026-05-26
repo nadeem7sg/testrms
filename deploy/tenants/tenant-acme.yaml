@@ -1,0 +1,13 @@
+tenant:
+  id: tenant_acme
+  workload: testrms
+  environment: qa
+  protected: true
+  rollout:
+    strategy: canary
+    steps: [5, 20, 50, 100]
+  approvals:
+    required:
+      - release_manager
+      - sre
+      - security

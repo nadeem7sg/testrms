@@ -1,0 +1,25 @@
+tenants:
+  tenant_demo:
+    segment: default
+    protected: false
+    policy_profile: standard
+    slo_profile: standard
+    rollout:
+      strategy: canary
+      steps: [10, 50, 100]
+      min_observation_minutes: 5
+
+  tenant_acme:
+    segment: gold
+    protected: true
+    policy_profile: strict
+    slo_profile: gold
+    rollout:
+      strategy: canary
+      steps: [5, 20, 50, 100]
+      min_observation_minutes: 30
+    approvals:
+      required:
+        - release_manager
+        - sre
+        - security
