@@ -1,0 +1,13 @@
+rollback:
+  strategy: previous_digest
+  preserve_previous_customer_main: true
+  evidence_snapshot_required: true
+  verification:
+    - /health
+    - /ready
+    - /version
+  protected_tenant_approval_required: true
+  runtime_signal_triggers:
+    - readiness_failure
+    - latency_spike
+    - error_spike

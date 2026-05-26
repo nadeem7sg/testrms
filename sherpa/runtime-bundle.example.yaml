@@ -1,0 +1,13 @@
+tenant_id: tenant_acme
+release_id: rel_local_001
+environment: qa
+graph_version: release-graph@1.0.0
+prompt_labels:
+  - qa
+  - tenant-acme
+model_routes:
+  coder: vllm-coder
+  reasoning: vllm-reasoning
+  planning: vllm-planner
+policy_bundle_version: policy-local-001
+rollout_stage: pre-canary

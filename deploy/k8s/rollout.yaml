@@ -8,6 +8,8 @@ spec:
   replicas: 2
   strategy:
     canary:
+      stableService: testrms-stable
+      canaryService: testrms-canary
       steps:
         - setWeight: 10
         - pause:
@@ -27,9 +29,15 @@ spec:
       labels:
         app.kubernetes.io/name: testrms
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
         - name: testrms
           image: ghcr.io/nadeem7sg/testrms:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8080
@@ -48,3 +56,16 @@ spec:
             httpGet:
               path: /health
               port: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
