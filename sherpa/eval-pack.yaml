@@ -1,0 +1,35 @@
+eval_pack:
+  id: testrms-basic
+  applies_to:
+    workload: testrms
+    risk_classes:
+      - low
+      - medium
+
+checks:
+  - id: health-check
+    type: http
+    endpoint: /health
+    blocking: true
+
+  - id: readiness-check
+    type: http
+    endpoint: /ready
+    blocking: true
+
+  - id: tenant-config-check
+    type: http
+    endpoint: /tenant/{tenant_id}/config
+    blocking: true
+
+  - id: latency-check
+    type: metric
+    metric: testrms_request_latency_seconds
+    threshold: p95 < 1000ms
+    blocking: true
+
+  - id: error-rate-check
+    type: metric
+    metric: testrms_errors_total
+    threshold: error_rate < 1%
+    blocking: true

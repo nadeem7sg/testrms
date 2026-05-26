@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: testrms-success-rate
+spec:
+  metrics:
+    - name: error-rate
+      interval: 1m
+      successCondition: result[0] < 0.01
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring.svc.cluster.local
+          query: |
+            sum(rate(testrms_errors_total[5m]))
+            /
+            clamp_min(sum(rate(testrms_requests_total[5m])), 1)
+    - name: p95-latency
+      interval: 1m
+      successCondition: result[0] < 1
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring.svc.cluster.local
+          query: |
+            histogram_quantile(
+              0.95,
+              sum(rate(testrms_request_latency_seconds_bucket[5m])) by (le)
+            )

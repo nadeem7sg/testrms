@@ -1,0 +1,12 @@
+policy_context:
+  workload: testrms
+  default_decision: allow
+  protected_tenant_decision: approval_required
+  required_evidence:
+    - release_manifest
+    - quality_scorecard
+    - tenant_resolution
+    - rollout_plan
+    - rollback_plan
+  protected_tenants:
+    - tenant_acme
