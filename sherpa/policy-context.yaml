@@ -10,3 +10,40 @@ policy_context:
     - rollback_plan
   protected_tenants:
     - tenant_acme
+    - tenant_finance
+    - tenant_sovereign
+  policy_profiles:
+    standard:
+      decision: allow
+      required_approvals: []
+    fast_lane:
+      decision: allow
+      required_approvals: []
+      max_risk_class: medium
+    protected_enterprise:
+      decision: approval_required
+      required_approvals:
+        - release_manager
+        - sre
+        - security
+    regulated_finance:
+      decision: approval_required
+      required_approvals:
+        - release_manager
+        - sre
+        - security
+        - compliance
+      required_evidence:
+        - audit_reconstruction
+        - rollback_drill
+    sovereign_strict:
+      decision: approval_required
+      required_approvals:
+        - release_manager
+        - sre
+        - security
+        - data_protection_officer
+      required_evidence:
+        - data_residency_check
+        - runtime_drift_check
+        - rollback_drill
