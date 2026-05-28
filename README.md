@@ -1,6 +1,6 @@
 # testrms
 
-`testrms` is the first Sherpa pilot workload. It is intentionally small, deployable, tenant-aware, and observable so Sherpa can exercise the full release promotion flow against a real repository.
+`testrms` is the first AqR/Sherpa pilot workload. It is intentionally small, deployable, tenant-aware, and observable so AqR can exercise the full release promotion flow against a real repository.
 
 ## Endpoints
 
@@ -11,6 +11,28 @@
 - `GET /metrics` exposes Prometheus metrics.
 - `POST /simulate/failure` enables a rollback test failure mode.
 - `POST /simulate/recovery` clears the simulated failure.
+
+## Tenant Showcase Scenarios
+
+This repository now models five tenant scenarios for AqR demos:
+
+| Tenant | Segment | Routing | Gate profile | Demo purpose |
+| --- | --- | --- | --- | --- |
+| `tenant_demo` | default | shared | standard | fast happy-path release |
+| `tenant_startup` | startup | shared | fast lane | low-friction canary with latency checks |
+| `tenant_acme` | enterprise | dedicated | protected enterprise | protected-tenant approvals and rollback drill |
+| `tenant_finance` | regulated | dedicated | regulated finance | compliance evidence and audit reconstruction |
+| `tenant_sovereign` | sovereign | dedicated | sovereign strict | data residency, runtime drift, and permanent evidence |
+
+Pilot hostnames follow the AqR tenant access plane convention:
+
+```text
+http://tenant-demo.89.169.121.117.nip.io/
+http://tenant-startup.89.169.121.117.nip.io/
+http://tenant-acme.89.169.121.117.nip.io/
+http://tenant-finance.89.169.121.117.nip.io/
+http://tenant-sovereign.89.169.121.117.nip.io/
+```
 
 ## Run Locally
 
@@ -34,9 +56,9 @@ docker build -t testrms:local .
 docker run --rm -p 8080:8080 testrms:local
 ```
 
-## Sherpa Onboarding
+## AqR Onboarding
 
-Sherpa should register this repository as:
+AqR should register this repository as:
 
 ```json
 {
@@ -55,10 +77,10 @@ The workload metadata lives in:
 - `sherpa/eval-pack.yaml`
 - `sherpa/policy-context.yaml`
 
-Expected pilot milestone:
+Expected north-star milestone:
 
 ```text
-Sherpa Pilot Workload v1 - testrms
+AqR North Star Pilot - tenant-aware testrms release governance
 ```
 
-The protected tenant is `tenant_acme`; Sherpa should require release manager, SRE, and security approval before promotion.
+Protected tenants are `tenant_acme`, `tenant_finance`, and `tenant_sovereign`; AqR should require the configured approval roles and rollback evidence before promotion.
