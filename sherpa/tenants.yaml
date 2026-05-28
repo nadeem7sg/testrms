@@ -1,19 +1,50 @@
 tenants:
   tenant_demo:
+    name: Demo Sandbox
     segment: default
     protected: false
     policy_profile: standard
     slo_profile: standard
+    access:
+      hostname: tenant-demo.89.169.121.117.nip.io
+      namespace: testrms
+      routing: shared
     rollout:
       strategy: canary
-      steps: [10, 50, 100]
+      steps: [25, 50, 100]
       min_observation_minutes: 5
+    eval_packs:
+      - smoke
+      - tenant_config
+
+  tenant_startup:
+    name: Startup Fast Lane
+    segment: startup
+    protected: false
+    policy_profile: fast_lane
+    slo_profile: bronze
+    access:
+      hostname: tenant-startup.89.169.121.117.nip.io
+      namespace: testrms
+      routing: shared
+    rollout:
+      strategy: linear
+      steps: [50, 100]
+      min_observation_minutes: 3
+    eval_packs:
+      - smoke
+      - latency
 
   tenant_acme:
-    segment: gold
+    name: Acme Protected Enterprise
+    segment: enterprise
     protected: true
-    policy_profile: strict
+    policy_profile: protected_enterprise
     slo_profile: gold
+    access:
+      hostname: tenant-acme.89.169.121.117.nip.io
+      namespace: tenant-acme
+      routing: dedicated
     rollout:
       strategy: canary
       steps: [5, 20, 50, 100]
@@ -23,3 +54,65 @@ tenants:
         - release_manager
         - sre
         - security
+    eval_packs:
+      - smoke
+      - tenant_acceptance
+      - rollback_readiness
+      - security
+
+  tenant_finance:
+    name: Finance Regulated
+    segment: regulated
+    protected: true
+    policy_profile: regulated_finance
+    slo_profile: platinum
+    access:
+      hostname: tenant-finance.89.169.121.117.nip.io
+      namespace: tenant-finance
+      routing: dedicated
+    rollout:
+      strategy: canary
+      steps: [1, 5, 25, 50, 100]
+      min_observation_minutes: 60
+    approvals:
+      required:
+        - release_manager
+        - sre
+        - security
+        - compliance
+    eval_packs:
+      - smoke
+      - tenant_acceptance
+      - security
+      - audit_reconstruction
+      - rollback_readiness
+    evidence_retention: long_term
+
+  tenant_sovereign:
+    name: Sovereign Data Tenant
+    segment: sovereign
+    protected: true
+    policy_profile: sovereign_strict
+    slo_profile: platinum
+    data_residency_region: eu-north1
+    access:
+      hostname: tenant-sovereign.89.169.121.117.nip.io
+      namespace: tenant-sovereign
+      routing: dedicated
+    rollout:
+      strategy: manual_canary
+      steps: [1, 10, 25, 100]
+      min_observation_minutes: 120
+    approvals:
+      required:
+        - release_manager
+        - sre
+        - security
+        - data_protection_officer
+    eval_packs:
+      - smoke
+      - tenant_acceptance
+      - data_residency
+      - runtime_drift
+      - rollback_readiness
+    evidence_retention: permanent
