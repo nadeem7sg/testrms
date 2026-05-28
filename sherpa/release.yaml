@@ -22,18 +22,28 @@ quality:
     - health_check
     - tenant_config_check
     - rollout_analysis
+    - rollback_readiness
 
 tenants:
   enabled: true
   default_tenants:
     - tenant_demo
+    - tenant_startup
     - tenant_acme
+    - tenant_finance
+    - tenant_sovereign
+  protected_tenants:
+    - tenant_acme
+    - tenant_finance
+    - tenant_sovereign
 
 rollback:
   strategy: previous_digest
   required: true
+  drill_required_for_protected_tenants: true
 
 observability:
   metrics_path: /metrics
   health_path: /health
   readiness_path: /ready
+  version_path: /version
