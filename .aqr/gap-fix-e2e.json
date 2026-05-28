@@ -1,0 +1,9 @@
+{
+  "triggered_at": "2026-05-28T13:00:14.766570+00:00",
+  "purpose": "AqR gap-fix E2E verification",
+  "checks": [
+    "internal_build_required",
+    "workflow_auto_completion",
+    "release_finalization"
+  ]
+}
