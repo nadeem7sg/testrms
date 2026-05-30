@@ -1,13 +1,26 @@
-tenant:
-  id: tenant_acme
-  workload: testrms
-  environment: qa
+apiVersion: aqr.7sg.ai/v1
+kind: TenantRelease
+metadata:
+  name: acme
+  annotations:
+    aqr.7sg.ai/source: aqr-control-plane
+    aqr.7sg.ai/authoritative: database
+spec:
+  tenant_id: acme
+  segment: enterprise
   protected: true
+  policy_profile: protected_enterprise
+  slo_profile: premium
+  data_residency_region: null
   rollout:
     strategy: canary
-    steps: [5, 20, 50, 100]
-  approvals:
-    required:
-      - release_manager
-      - sre
-      - security
+    steps:
+    - 5
+    - 20
+    - 50
+    - 100
+    min_observation_minutes: 30
+    approvals:
+    - release_manager
+    - sre
+    - security
