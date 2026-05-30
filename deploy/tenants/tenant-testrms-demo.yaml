@@ -1,0 +1,22 @@
+apiVersion: aqr.7sg.ai/v1
+kind: TenantRelease
+metadata:
+  name: testrms-demo
+  annotations:
+    aqr.7sg.ai/source: aqr-control-plane
+    aqr.7sg.ai/authoritative: database
+spec:
+  tenant_id: testrms-demo
+  segment: default
+  protected: false
+  policy_profile: default
+  slo_profile: standard
+  data_residency_region: null
+  rollout:
+    strategy: canary
+    steps:
+    - 10
+    - 50
+    - 100
+    min_observation_minutes: 5
+    approvals: []
