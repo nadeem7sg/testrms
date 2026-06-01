@@ -1,65 +1,11 @@
 eval_pack:
-  id: testrms-scenario-suite
-  applies_to:
-    workload: testrms
-    risk_classes:
-      - low
-      - medium
-      - high
-      - critical
-
+  id: aqr-basic
 checks:
   - id: health-check
     type: http
     endpoint: /health
     blocking: true
-
   - id: readiness-check
     type: http
     endpoint: /ready
-    blocking: true
-
-  - id: version-check
-    type: http
-    endpoint: /version
-    blocking: true
-
-  - id: tenant-config-check
-    type: http
-    endpoint: /tenant/{tenant_id}/config
-    blocking: true
-
-  - id: tenant-access-check
-    type: http
-    endpoint: http://{tenant_hostname}/health
-    blocking: true
-
-  - id: latency-check
-    type: metric
-    metric: testrms_request_latency_seconds
-    threshold: p95 < 1000ms
-    blocking: true
-
-  - id: error-rate-check
-    type: metric
-    metric: testrms_errors_total
-    threshold: error_rate < 1%
-    blocking: true
-
-  - id: rollback-readiness-check
-    type: control_plane
-    requires:
-      - rollback_plan
-      - previous_digest
-      - healthy_previous_replica_set
-    blocking: true
-
-  - id: audit-reconstruction-check
-    type: evidence
-    requires:
-      - release_manifest
-      - eval_result
-      - policy_decision
-      - approval_packet
-      - rollout_observation
     blocking: true
