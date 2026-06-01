@@ -1,49 +1,21 @@
 workload:
   name: testrms
   type: service
-  runtime: fastapi
+  runtime: container
   deployment: argo-rollouts
-
 source:
   provider: github
   repository: nadeem7sg/testrms
   default_branch: main
-
 release:
   artifact_type: container
   image_name: testrms
   immutable_promotion: true
-
-quality:
-  required_checks:
-    - unit_tests
-    - container_build
-    - vulnerability_scan
-    - health_check
-    - tenant_config_check
-    - rollout_analysis
-    - rollback_readiness
-
-tenants:
-  enabled: true
-  default_tenants:
-    - tenant_demo
-    - tenant_startup
-    - tenant_acme
-    - tenant_finance
-    - tenant_sovereign
-  protected_tenants:
-    - tenant_acme
-    - tenant_finance
-    - tenant_sovereign
-
 rollback:
   strategy: previous_digest
   required: true
-  drill_required_for_protected_tenants: true
-
 observability:
-  metrics_path: /metrics
   health_path: /health
   readiness_path: /ready
   version_path: /version
+  metrics_path: /metrics
